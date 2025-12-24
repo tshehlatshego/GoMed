@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Medication Option</title>
+    <link rel="stylesheet" href="choose-option.css">
+    
+</head>
+<body>
+
+     <header class="header">
+    <div class="logo" >GoMed 🩺</div>
+    
+  </header>
+
+<div class="container">
+    <h1>Select an option</h1>
+
+    <div class="option-card" onclick="goToSelfMedication()">
+        <h3>🩺 Self-Medicate</h3>
+        <p>Chat with our assistant about your symptoms</p>
+    </div>
+
+    <div class="option-card" onclick="goToPrescription()">
+        <h3>💊 Prescription</h3>
+        <p>Upload a doctor’s prescription</p>
+    </div>
+
+    <div class="option-card" onclick="goToCollection()">
+        <h3>🏥 Collection</h3>
+        <p>Collect medication from a nearby pharmacy</p>
+    </div>
+</div>
+
+<script src="choose-option.js"></script>
+</body>
+</html>

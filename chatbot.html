@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GoMed | Self-Medicate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="chatbot.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo" onclick="goToChooseoption()">GoMed 🩺 </div>
+    <div class="cart" >
+      🛒 Cart <span class="cart-count">0</span>
+    </div> 
+    <div class="cart-dropdown" id="cartDropdown" style="display:none;">
+  <ul id="cartList"></ul>
+    </div>
+  </header>
+
+  <!-- Main Chat Area -->
+  <main class="chat-container" id="chatContainer">
+
+    <div class="chat-message bot">
+      Hi 👋 I’m here to help you self-medicate safely.  
+      Please choose a symptom:
+    </div>
+
+    <!-- Symptom Options -->
+    <div class="options" id="symptomOptions">
+  <button class="option-btn" data-symptom="headache">Headache</button>
+  <button class="option-btn" data-symptom="fever">Fever</button>
+  <button class="option-btn" data-symptom="cough">Cough</button>
+  <button class="option-btn" data-symptom="stomach pain">Stomach Pain</button>
+  <button class="option-btn" data-symptom="other">Something else</button>
+</div>
+
+
+    
+  </main>
+
+  <!-- Disclaimer -->
+  <footer class="disclaimer">
+    ⚠ This assistant provides general Over-the-counter guidance only.  
+    It does not diagnose or replace a healthcare professional.
+  </footer>
+<script src="chatbot.js"></script>
+</body>
+</html>

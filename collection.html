@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collection Appointment</title>
+    <link rel="stylesheet" href="collection.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Schedule Medication Collection</h2>
+    <p>Please enter your nearest pharmacy or clinic and choose a date and time.</p>
+
+    <label>Nearest Pharmacy / Clinic</label>
+    <input type="text" id="location" placeholder="e.g. Clicks Pharmacy, Dis-Chem, Local Clinic">
+
+    <label>Collection Date</label>
+    <input type="date" id="date">
+
+    <label>Collection Time</label>
+    <input type="time" id="time">
+
+    <button onclick="confirmCollection()">Confirm Appointment</button>
+</div>
+
+<script src="collection.js"></script>
+</body>
+</html>
