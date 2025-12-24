@@ -90,9 +90,14 @@ function handleLogin(event) {
         // Show success message
         showSuccess('Login successful! Redirecting...');
 
+        // Determine return URL if present
+        const params = new URLSearchParams(window.location.search);
+        const returnUrl = params.get('return');
+        const next = returnUrl ? decodeURIComponent(returnUrl) : 'index.html';
+
         // Redirect after 1.5 seconds
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = next;
         }, 1500);
     }, 800);
 }

@@ -36,10 +36,6 @@
             border-radius: 8px;
             font-weight: bold;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .button1 {
@@ -184,9 +180,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(83, 187, 236, 0.3);
-            text-decoration: none;
-            line-height: 60px;
-            text-align: center;
         }
         
         .start:hover {
@@ -242,18 +235,22 @@
     <body>
         <!-- Navigation -->
         <div class="zone">
-            <a href="index.html" class="button">Home</a>
-            <a href="#features" class="button">Features</a>
-            <a href="choose-option.html" class="button">How it works</a>
-            <a href="#features" class="button">Security</a>
-            <a href="#features" class="button">About Us</a>
-            <a href="choose-option.html" class="button" onclick="return handleGetStarted('choose-option.html')">Get Started</a>
-            <a href="login.html" class="button1">Login</a>
+            <button class="button">Home</button>
+            <button class="button">Features</button>
+            <button class="button">How it works</button>
+            <button class="button">Security</button>
+            <button class="button">About Us</button>
+            <a class="button" href="choose-option.html" target="_top" onclick="return handleGetStarted('choose-option.html')">Get Started</a>
+            <button class="button1">Login</button>
         </div>
         
         <!-- Header -->
         <div class="header-container">
-            <img class="logo" src="Logo.jpg" alt="GoMed logo" loading="lazy"> 
+            <!-- Replace with your actual logo image or use a placeholder -->
+            <div style="width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                
+                <img class="logo" src="src/logo.jpg" alt="Medical scooter logo" width="300" height="75" loading="lazy"> 
+            </div>
             <div class="text-container">
                 <h1 class="words">Go-Med</h1>
                 <h2 class="words2">Medication to you!</h2>
@@ -262,12 +259,15 @@
 
         <!-- Hero Section -->
         <div class="wrapper">   
-            <img class="drugs" src="Drugs.jpg" loading="lazy" alt="medications">
+            <!-- Replace with your actual image or use a placeholder -->
+            <div style="width: 300px; height: 200px; background-color: #3455a3; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                 <img class="drugs" src="images/drugs.jpg" width="250" height="200" loading="lazy" alt="drugs">
+            </div>
             <h3 class="words3">AI-powered medication delivery</h3>
         </div>
 
         <!-- Features Grid -->
-        <div class="features-container" id="features">
+        <div class="features-container">
             <!-- Feature 1 -->
             <div class="box">
                 <button class="icon">
@@ -362,7 +362,43 @@
         </div>
 
         <!-- CTA Button -->
-        <a href="choose-option.html" class="start" onclick="return handleGetStarted('choose-option.html')">Get Started Now</a>
+        <a class="start" href="choose-option.html" target="_top" onclick="return handleGetStarted('choose-option.html')">Get Started Now</a>
+
         <script src="auth.js"></script>
+
+        <!-- Firebase Script - Commented out for debugging -->
+        <!--
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+            
+            const firebaseConfig = {
+                apiKey: "AIzaSyA0-CyuiDiqGU_AeGKMIl633qO_VRy7v8c",
+                authDomain: "gomed-app-a31a2.firebaseapp.com",
+                projectId: "gomed-app-a31a2",
+                storageBucket: "gomed-app-a31a2.firebasestorage.app",
+                messagingSenderId: "1023350422164",
+                appId: "1:1023350422164:web:ebc3d191c1bd7125e01281",
+                measurementId: "G-GC8JZW5WEB"
+            };
+
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+        </script>
+        -->
     </body>
+</html>
+=======
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoMed</title>
+  </head>
+  <body class="bg-slate-950 text-slate-50">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

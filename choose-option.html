@@ -7,6 +7,14 @@
     
 </head>
 <body>
+    <script src="auth.js"></script>
+    <script>
+        // Enforce login when accessing the choose-option page directly
+        enforceLoginOrRedirect('choose-option.html');
+    </script>
+    <div style="position:fixed; top:16px; left:16px; z-index:1000;">
+        <a href="index.html" style="background:#0b6ef6; color:#fff; padding:10px 16px; border-radius:8px; text-decoration:none; font-weight:600; box-shadow: 0 4px 12px rgba(11,110,246,0.2);">Home</a>
+    </div>
 
      <header class="header">
     <div class="logo" >GoMed 🩺</div>
