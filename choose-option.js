@@ -1,5 +1,4 @@
 function goToSelfMedication() {
-    // Chatbot page created by another team member
     window.location.href = "chatbot.html";
 }
 

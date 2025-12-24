@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import { House, Menu, ShoppingCart } from "lucide-react";
 import logo from "./logo.jpg";
-import Home from "./pages/Home";
+import HomeHtml from "./pages/HomeHtml";
 import AddPicture from "./pages/AddPicture";
 
 import PlaceOrder from "./pages/PlaceOrder";
@@ -81,7 +81,7 @@ function App() {
         {/* Route content */}
         <div className="min-h-[60vh]">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomeHtml />} />
             <Route path="/add-picture" element={<AddPicture />} />
             <Route path="/place-order" element={<PlaceOrder medications={medications} setMedications={setMedications} />} />
             <Route path="/cart" element={<Cart medications={medications} setMedications={setMedications} />} />

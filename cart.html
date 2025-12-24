@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - GoMed</title>
+    <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">GoMed 🩺</div>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">Home</a>
+            <a href="place-order.html" class="nav-btn">Order Meds</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Shopping Cart</h1>
+        
+        <div id="emptyCart" class="empty-cart" style="display: none;">
+            <div class="empty-icon">🛒</div>
+            <h2>Your cart is empty</h2>
+            <p>Add medications from the Order page</p>
+            <a href="place-order.html" class="continue-btn">Order Medications</a>
+        </div>
+
+        <div id="cartContent" style="display: none;">
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be inserted here -->
+            </div>
+
+            <div class="cart-summary-box">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>$<span id="subtotal">0.00</span></span>
+                </div>
+                <div class="summary-row">
+                    <span>Items:</span>
+                    <span id="totalItems">0</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-row total-row">
+                    <span>Total:</span>
+                    <span class="total-price">$<span id="totalPrice">0.00</span></span>
+                </div>
+                <button class="checkout-btn" onclick="proceedToCheckout()">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cart.js"></script>
+</body>
+</html>

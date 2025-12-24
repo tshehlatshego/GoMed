@@ -1,12 +1,367 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GoMed</title>
-  </head>
-  <body class="bg-gradient-to-br from-brand-200 via-brand-300 to-brand-400 text-white">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Go-Med</title>
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #bdf0fd, #BEE9F2);
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .zone {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px;
+            gap: 10px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .button, .button1 {
+            background-color: rgb(83, 187, 236);
+            color: white;
+            border: none;
+            height: 35px;
+            width: 110px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .button1 {
+            background-color: white;
+            color: rgb(83, 187, 236);
+            border: 2px solid rgb(83, 187, 236);
+        }
+        
+        .button:hover {
+            background-color: rgb(50, 150, 200);
+            transform: translateY(-2px);
+        }
+        
+        .button1:hover {
+            background-color: rgb(83, 187, 236);
+            color: white;
+        }
+        
+        /* Header */
+        .header-container {
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            gap: 20px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+        
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .words {
+            color: #3455a3;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        
+        .words2 {
+            color: rgb(83, 187, 236);
+            font-size: 20px;
+            font-weight: normal;
+        }
+        
+        /* Hero Section */
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            padding: 40px;
+            background-color: rgba(83, 187, 236, 0.2);
+            margin: 20px auto;
+            border-radius: 15px;
+            max-width: 1200px;
+        }
+        
+        .drugs {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .words3 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3455a3;
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        /* Features Grid */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .box {
+            background-color: white;
+            border-radius: 15px;
+            border: 2px solid #3455a3;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 280px;
+        }
+        
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .icon {
+            background-color: rgb(83, 187, 236);
+            border-radius: 50%;
+            border: none;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .box h4, .box h5, .box h6, .box h7, .box h8, .box h9, .box h10 {
+            color: #3455a3;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .box p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* CTA Button */
+        .start {
+            background-color: rgb(83, 187, 236);
+            color: white;
+            border: none;
+            width: 250px;
+            height: 60px;
+            border-radius: 30px;
+            display: block;
+            margin: 50px auto;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(83, 187, 236, 0.3);
+            text-decoration: none;
+            line-height: 60px;
+            text-align: center;
+        }
+        
+        .start:hover {
+            background-color: #3455a3;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(83, 187, 236, 0.4);
+        }
+        
+        /* SVG Icons */
+        svg {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .zone {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .wrapper {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .drugs {
+                width: 200px;
+            }
+            
+            .words3 {
+                font-size: 22px;
+            }
+            
+            .features-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                padding: 20px;
+            }
+            
+            .button, .button1 {
+                width: 90px;
+                font-size: 12px;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <div class="zone">
+            <a href="index.html" class="button">Home</a>
+            <a href="#features" class="button">Features</a>
+            <a href="choose-option.html" class="button">How it works</a>
+            <a href="#features" class="button">Security</a>
+            <a href="#features" class="button">About Us</a>
+            <a href="choose-option.html" class="button">Get Started</a>
+            <a href="login.html" class="button1">Login</a>
+        </div>
+        
+        <!-- Header -->
+        <div class="header-container">
+            <img class="logo" src="Logo.jpg" alt="GoMed logo" loading="lazy"> 
+            <div class="text-container">
+                <h1 class="words">Go-Med</h1>
+                <h2 class="words2">Medication to you!</h2>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="wrapper">   
+            <img class="drugs" src="Drugs.jpg" loading="lazy" alt="medications">
+            <h3 class="words3">AI-powered medication delivery</h3>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-container" id="features">
+            <!-- Feature 1 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 8V4H8"></path>
+                        <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+                        <path d="M2 14h2"></path><path d="M20 14h2"></path>
+                        <path d="M15 13v2"></path><path d="M9 13v2"></path>
+                    </svg>
+                </button>
+                <h4>AI Medication Management</h4>
+                <p>Smart algorithms analyze your prescriptions, track refills, and predict when you'll need medication</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                    </svg>
+                </button>
+                <h5>Security</h5>
+                <p>Safe and reliable medication delivery with secure and transparent payment system</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </button>
+                <h6>24/7 Availability</h6>
+                <p>Emergency medication delivery available around the clock, every day of the year</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </button>
+                <h7>Track Location</h7>
+                <p>Track your medication from pharmacy to your doorstep with live updates</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="8" cy="8" r="6"></circle>
+                        <path d="M18.09 10.37A6 6 0 1 1 10.34 18"></path>
+                        <path d="M7 6h1v4"></path>
+                        <path d="m16.71 13.88.7.71-2.82 2.82"></path>
+                    </svg>
+                </button>
+                <h8>Payment</h8>
+                <p>Fast, secure, and transparent payment system</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+                        <path d="M15 18H9"></path>
+                        <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path>
+                        <circle cx="17" cy="18" r="2"></circle>
+                        <circle cx="7" cy="18" r="2"></circle>
+                    </svg>
+                </button>
+                <h9>Delivery</h9>
+                <p>Fast and reliable delivery with temperature-regulated transportation</p>
+            </div>
+
+            <!-- Feature 7 -->
+            <div class="box">
+                <button class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 2v2"></path><path d="M5 2v2"></path>
+                        <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+                        <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+                        <circle cx="20" cy="10" r="2"></circle>
+                    </svg>
+                </button>
+                <h10>Automated Doctor Check-ins</h10>
+                <p>Regular automated consultations and health monitoring to ensure optimal treatment</p>
+            </div>
+        </div>
+
+        <!-- CTA Button -->
+        <a href="choose-option.html" class="start">Get Started Now</a>
+    </body>
 </html>

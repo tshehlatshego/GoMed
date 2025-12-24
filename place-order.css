@@ -1,0 +1,256 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #bdf0fd, #BEE9F2);
+    min-height: 100vh;
+}
+
+.header {
+    background: #0b6ef6;
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.cart-btn {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+h1 {
+    color: #3455a3;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.medications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 100px;
+}
+
+.med-card {
+    background: white;
+    border-radius: 15px;
+    border: 2px solid #3455a3;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.med-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.med-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+.med-info {
+    padding: 20px;
+}
+
+.med-name {
+    color: #3455a3;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.med-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+.med-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.med-price {
+    color: rgb(83, 187, 236);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.med-quantity {
+    background: rgba(83, 187, 236, 0.2);
+    color: #3455a3;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.med-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid rgb(83, 187, 236);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    background: white;
+    color: rgb(83, 187, 236);
+}
+
+.control-btn:hover {
+    background: rgb(83, 187, 236);
+    color: white;
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-btn.add {
+    background: rgb(83, 187, 236);
+    color: white;
+}
+
+.control-btn.add:hover {
+    background: rgb(50, 150, 200);
+}
+
+.cart-summary {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 600px;
+    background: white;
+    border-radius: 15px;
+    border: 2px solid #3455a3;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.summary-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cart-icon {
+    color: #3455a3;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.cart-total {
+    color: rgb(83, 187, 236);
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.checkout-btn {
+    background: rgb(83, 187, 236);
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(83, 187, 236, 0.3);
+}
+
+.checkout-btn:hover {
+    background: #3455a3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(83, 187, 236, 0.4);
+}
+
+@media (max-width: 768px) {
+    .medications-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-content {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .checkout-btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Medications - GoMed</title>
+    <link rel="stylesheet" href="place-order.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">GoMed 🩺</div>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">Home</a>
+            <a href="cart.html" class="nav-btn cart-btn">
+                🛒 Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Order Medications</h1>
+        
+        <div class="medications-grid" id="medicationsGrid">
+            <!-- Medications will be inserted here by JavaScript -->
+        </div>
+
+        <div class="cart-summary" id="cartSummary" style="display: none;">
+            <div class="summary-content">
+                <div class="summary-info">
+                    <div class="cart-icon">🛒 <span id="summaryItems">0</span> items</div>
+                    <div class="cart-total">$<span id="summaryTotal">0.00</span></div>
+                </div>
+                <a href="cart.html" class="checkout-btn">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="place-order.js"></script>
+</body>
+</html>
