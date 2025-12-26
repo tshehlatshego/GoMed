@@ -228,7 +228,7 @@ async function callAI(symptom, description = "", severity = "") {
   showTypingIndicator();
 
   try {
-    const response = await fetch("http://localhost:5000/api/medical-assist", {
+    const response = await fetch("/api/medical-assist", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ symptom, description, severity })
@@ -287,3 +287,4 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
