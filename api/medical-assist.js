@@ -42,15 +42,20 @@ function buildPrompt(symptom, description, severity) {
 
   return `
 IMPORTANT:
-- Return ONLY raw JSON.
-- No markdown or explanations.
+-Return ONLY raw JSON.
+-Do not include markdown, code blocks, or explanations.
+You are a medical assistant AI. The user reports:
+- Symptom: ${symptom}
+- Description: ${limitedDescription}
+- Severity: ${severity}
 
-User:
-Symptom: ${symptom}
-Description: ${limitedDescription}
-Severity: ${severity}
+Instructions:
+- Only suggest over-the-counter (OTC) medication.
+- Follow WHO/NHS guidelines for self-medication.
+- Give general guidance, do not diagnose.
+- Escalate only if severity is severe or extreme.
+- Respond in JSON format:
 
-Respond exactly as:
 
 {
   "guidance": "general advice",
@@ -77,18 +82,7 @@ export default async function handler(req, res) {
       .replace(/```/g, "")
       .trim();
 
-  
-let aiResponse;
-try {
-  aiResponse = JSON.parse(cleanText);
-} catch (err) {
-  console.warn("Failed to parse AI JSON, using fallback:", err);
-  aiResponse = {
-    guidance: "",
-    medications: [],
-    escalation: "none"
-  };
-}
+    const aiResponse = JSON.parse(cleanText);
 
     return res.json({
       guidance: aiResponse.guidance,
@@ -97,11 +91,11 @@ try {
     });
 
   } catch (err) {
-    console.error("AI error:", err);
+    console.error(err);
 
     return res.json({
       guidance:
-        "Based on what you've shared, rest, hydration, and Over-the-counter medication may help. If symptoms worsen, consult a healthcare professional.",
+        "Based on what you've shared, rest, hydration, and OTC medication may help. If symptoms worsen, consult a healthcare professional.",
       medications: [
         { name: "Paracetamol", description: "Pain or fever relief." },
         { name: "Oral Rehydration Salts", description: "Hydration support." }
@@ -110,4 +104,3 @@ try {
     });
   }
 }
-
