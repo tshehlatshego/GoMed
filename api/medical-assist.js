@@ -106,8 +106,8 @@ export default async function handler(req, res) {
 
   const { symptom, description = "", severity = "" } = req.body;
 
-  try {
-     console.log("🔑 API KEY EXISTS:", !!process.env.GEMINI_API_KEY);
+ try {
+  console.log("🔑 API KEY EXISTS:", !!process.env.GEMINI_API_KEY);
 
   const prompt = buildPrompt(symptom, description, severity);
   console.log("📨 PROMPT SENT");
@@ -135,28 +135,24 @@ export default async function handler(req, res) {
       name: "Cough Syrup",
       description: "Helps relieve cough symptoms."
     }];
-    }
-
-    return res.status(200).json({
-      guidance: aiResponse.guidance,
-      medications,
-      escalation: determineEscalation(severity)
-    });
-
-  } catch (error) {
-    console.error("❌ Gemini error:", error.message);
-
-    return res.status(200).json({
-      guidance:
-        "I’m having trouble analyzing symptoms right now. Consider rest, hydration, and OTC relief. Seek medical advice if symptoms worsen.",
-      medications: [
-        {
-          name: "Paracetamol",
-          description: "Helps relieve mild pain or fever."
-        }
-      ],
-      escalation: determineEscalation(severity)
-    });
   }
+
+  return res.status(200).json({
+    guidance: aiResponse.guidance,
+    medications,
+    escalation: determineEscalation(severity)
+  });
+
+} catch (error) {
+  console.error("❌ SERVER ERROR:", error);
+
+  return res.status(200).json({
+    guidance: "Sorry, we’re having trouble analyzing your symptoms right now.",
+    medications: [],
+    escalation: "none"
+  });
 }
+
+}
+
 
