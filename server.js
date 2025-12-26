@@ -79,8 +79,8 @@ function buildPrompt(symptom, description, severity) {
   : "";
   return `
  IMPORTANT:
--Return ONLY raw JSON.
--Do not include markdown, code blocks, or explanations.
+ Return ONLY valid JSON.
+- No markdown, explanations, or code blocks.
 You are a medical assistant AI. The user reports:
 - Symptom: ${symptom}
 - Description: ${limitedDescription}
@@ -91,11 +91,11 @@ Instructions:
 - Follow WHO/NHS guidelines for self-medication.
 - Give general guidance, do not diagnose.
 - Escalate only if severity is severe or extreme.
-- Respond in JSON format:
+- Respond in JSON format exactly like this:
 
 {
   "guidance": "general medical advice",
-   "escalation": "none | consult doctor | urgent care"
+   "escalation": "none | consult doctor | urgent care",
   "medications": [{"name": "OTC medication name", "description": "short description"}],
  
 }
@@ -164,3 +164,4 @@ app.post("/api/medical-assist", rateLimit, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`GoMed Gemini backend running on port ${PORT}`);
 });
+
