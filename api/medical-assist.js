@@ -15,13 +15,27 @@ export default async function handler(req, res) {
     });
 
     const prompt = `
-You are a medical information assistant.
-Follow WHO and NHS guidelines.
-DO NOT diagnose.
-ONLY recommend OTC medication.
-Symptom: ${symptom}
-Details: ${description}
-Severity: ${severity}
+IMPORTANT:
+ Return ONLY valid JSON.
+- No markdown, explanations, or code blocks.
+You are a medical assistant AI. The user reports:
+- Symptom: ${symptom}
+- Description: ${limitedDescription}
+- Severity: ${severity}
+
+Instructions:
+- Only suggest over-the-counter (OTC) medication.
+- Follow WHO/NHS guidelines for self-medication.
+- Give general guidance, do not diagnose.
+- Escalate only if severity is severe or extreme.
+- Respond in JSON format exactly like this:
+
+{
+  "guidance": "general medical advice",
+   "escalation": "none | consult doctor | urgent care",
+  "medications": [{"name": "OTC medication name", "description": "short description"}],
+ 
+}
 `;
 
     const result = await model.generateContent(prompt);
@@ -48,3 +62,4 @@ Severity: ${severity}
     });
   }
 }
+
