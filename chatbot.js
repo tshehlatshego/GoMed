@@ -207,14 +207,8 @@ function handleSeverityResponse(symptomText, severity) {
       }
     `;
     chatContainer.appendChild(warning);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 
-  // OTC guidance for mild/moderate
-  
-
-  // Scroll to latest message
-  chatContainer.scrollTop = chatContainer.scrollHeight;
   callAI("other", symptomText, severity)
 }
 
@@ -281,6 +275,7 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
 
 
 
