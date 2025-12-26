@@ -154,7 +154,7 @@ function askForCustomSymptoms() {
   });
 }
 
-function askForSeverity(symptomText) {
+function askForSeverity(currentSymptom, symptomText="") {
   addBotMessage("How severe are your symptoms?");
 
   const severityDiv = document.createElement("div");
@@ -181,7 +181,7 @@ function askForSeverity(symptomText) {
   : "extreme";
 
       severityDiv.remove();
-      handleSeverityResponse(symptomText, severity);
+      handleSeverityResponse(currentSymptom,symptomText, severity);
     });
   });
 }
@@ -193,7 +193,7 @@ function determineEscalation(severity) {
 }
 
 
-function handleSeverityResponse(symptomText, severity) {
+function handleSeverityResponse(symptom,symptomText, severity) {
   // Add warning banners for Severe/Extreme
   if (severity === "severe" || severity === "extreme") {
     const warning = document.createElement("div");
@@ -209,7 +209,7 @@ function handleSeverityResponse(symptomText, severity) {
     chatContainer.appendChild(warning);
   }
 
-  callAI(symptomText,"", severity)
+  callAI(symptom,symptomText, severity)
 }
 
 async function callAI(symptom, description = "", severity = "") {
@@ -254,7 +254,7 @@ function handleSymptom(symptom) {
   if (symptom === "other") {
     askForCustomSymptoms();
   } else {
-    askForSeverity(symptom);
+    askForSeverity(symptom,"");
   }
 }
 
@@ -275,6 +275,7 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
 
 
 
