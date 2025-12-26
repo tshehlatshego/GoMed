@@ -86,13 +86,27 @@ export default async function handler(req, res) {
       .replace(/```/g, "")
       .trim();
 
-    const aiResponse = JSON.parse(cleanText);
+   let aiResponse;
+try {
+  aiResponse = JSON.parse(cleanText);
+} catch (err) {
+  console.error("❌ Failed to parse AI JSON:", err);
+  aiResponse = {
+    guidance:
+      "I’m having trouble analyzing detailed symptoms right now. Based on what you've shared, consider rest, hydration, and basic OTC relief.",
+    medications: [
+      { name: "Paracetamol", description: "Helps relieve mild pain or discomfort." },
+      { name: "Oral Rehydration Salts", description: "Supports hydration and recovery." }
+    ],
+    escalation: determineEscalation(severity)
+  };
+}
 
-    return res.json({
-      guidance: aiResponse.guidance,
-      medications: filterOTCMedications(aiResponse.medications),
-      escalation: determineEscalation(severity)
-    });
+res.json({
+  guidance: aiResponse.guidance || "Consider rest, hydration, and OTC support.",
+  medications: filterOTCMedications(aiResponse.medications || []),
+  escalation: determineEscalation(severity)
+});
 
   } catch (error) {
     console.error("Gemini error:", error);
@@ -108,3 +122,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
