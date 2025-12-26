@@ -6,7 +6,7 @@ const {GoogleGenerativeAI} = require("@google/generative-ai"); // Or use OpenAI 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const apiKey=process.env.GEMINI_API_KEY;
 app.use(cors());
 app.use(express.json());
 app.get("/api/health", (req, res) => {
@@ -33,9 +33,24 @@ console.log("Gemini key loaded:", process.env.GEMINI_API_KEY ? "YES" : "NO");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 const OTC_ALLOW_LIST = [
+  // Pain & fever
   "Paracetamol",
   "Ibuprofen",
   "Aspirin",
+
+  // Cough & cold
+  "Dextromethorphan",
+  "Guaifenesin",
+  "Cough",
+  "Lozenge",
+  "Honey",
+  "Saline nasal spray",
+
+  // Allergy
+  "Cetirizine",
+  "Loratadine",
+
+  // GI
   "Oral Rehydration Salts",
   "ORS",
   "Antacid",
@@ -45,13 +60,12 @@ const OTC_ALLOW_LIST = [
   "Pepcid",
   "H2 blocker",
   "Loperamide",
-  "Cetirizine",
-  "Loratadine",
-  "Saline nasal spray",
-  "Cough syrup",
+
+  // Supplements
   "Zinc",
   "Vitamin C"
 ];
+
 
 function filterOTCMedications(medications = []) {
   return medications.filter(med =>
@@ -61,6 +75,7 @@ function filterOTCMedications(medications = []) {
     )
   );
 }
+
 
  // replace bodyParser
 
@@ -79,8 +94,8 @@ function buildPrompt(symptom, description, severity) {
   : "";
   return `
  IMPORTANT:
- Return ONLY valid JSON.
-- No markdown, explanations, or code blocks.
+-Return ONLY raw JSON.
+-Do not include markdown, code blocks, or explanations.
 You are a medical assistant AI. The user reports:
 - Symptom: ${symptom}
 - Description: ${limitedDescription}
@@ -91,11 +106,11 @@ Instructions:
 - Follow WHO/NHS guidelines for self-medication.
 - Give general guidance, do not diagnose.
 - Escalate only if severity is severe or extreme.
-- Respond in JSON format exactly like this:
+- Respond in JSON format:
 
 {
   "guidance": "general medical advice",
-   "escalation": "none | consult doctor | urgent care",
+   "escalation": "none | consult doctor | urgent care"
   "medications": [{"name": "OTC medication name", "description": "short description"}],
  
 }
@@ -123,38 +138,46 @@ app.post("/api/medical-assist", rateLimit, async (req, res) => {
       .replace(/```/g, "")
       .trim();
 
-    console.log("🧹 CLEANED text:\n", cleanText);
-
     const aiResponse = JSON.parse(cleanText);
 
-    console.log("✅ PARSED JSON:", aiResponse);
+    let medications = filterOTCMedications(aiResponse.medications);
+
+  if (!medications || medications.length === 0) {
+   medications = [
+    {
+      name: "Cough Syrup",
+      description: "Helps relieve cough symptoms. Choose a formulation suitable for your cough type."
+    }
+    ];
+}
+
+res.json({
+  guidance: aiResponse.guidance,
+  medications,
+  escalation: determineEscalation(severity)
+});
+
+  } catch (error) {
+    console.error("❌ Gemini fetch error:", error.message);
 
     res.json({
-      guidance: aiResponse.guidance,
-      medications: filterOTCMedications(aiResponse.medications),
+      guidance:
+        "I’m having trouble analyzing detailed symptoms right now. Based on what you've shared, consider rest, hydration, and basic OTC relief. If symptoms persist or worsen, consult a healthcare professional.",
+      medications: [
+        {
+          name: "Paracetamol",
+          description: "Helps relieve mild pain or discomfort."
+        },
+        {
+          name: "Oral Rehydration Salts",
+          description: "Supports hydration and recovery."
+        }
+      ],
       escalation: determineEscalation(severity)
     });
-
-  }catch (error) {
-  console.error("❌ Gemini fetch error:", error.message);
-
-  return res.json({
-    guidance:
-      "I’m having trouble analyzing detailed symptoms right now. Based on what you've shared, consider rest, hydration, and basic OTC relief. If symptoms persist or worsen, consult a healthcare professional.",
-    medications: [
-      {
-        name: "Paracetamol",
-        description: "Helps relieve mild pain or discomfort."
-      },
-      {
-        name: "Oral Rehydration Salts",
-        description: "Supports hydration and recovery."
-      }
-    ],
-    escalation: determineEscalation(severity)
-  });
-}
+  }
 });
+
 
 
 
@@ -164,4 +187,3 @@ app.post("/api/medical-assist", rateLimit, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`GoMed Gemini backend running on port ${PORT}`);
 });
-
