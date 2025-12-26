@@ -1,74 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
-const OTC_ALLOW_LIST = [
-  "Paracetamol",
-  "Ibuprofen",
-  "Aspirin",
-  "Oral Rehydration Salts",
-  "ORS",
-  "Antacid",
-  "Bismuth",
-  "Pepto",
-  "Famotidine",
-  "Pepcid",
-  "H2 blocker",
-  "Loperamide",
-  "Cetirizine",
-  "Loratadine",
-  "Saline nasal spray",
-  "Cough syrup",
-  "Zinc",
-  "Vitamin C"
-];
-
-function filterOTCMedications(medications = []) {
-  return medications.filter(med =>
-    OTC_ALLOW_LIST.some(allowed =>
-      med.name.toLowerCase().includes(allowed.toLowerCase())
-    )
-  );
-}
-
-function determineEscalation(severity) {
-  if (severity === "extreme") return "urgent care";
-  if (severity === "severe") return "consult doctor";
-  return "none";
-}
-
-function buildPrompt(symptom, description, severity) {
-  const limitedDescription = description ? description.slice(0, 300) : "";
-
-  return `
-IMPORTANT:
-- Return ONLY raw JSON.
-- Do not include markdown, code blocks, or explanations.
-
-You are a medical assistant AI. The user reports:
-- Symptom: ${symptom}
-- Description: ${limitedDescription}
-- Severity: ${severity}
-
-Instructions:
-- Only suggest over-the-counter (OTC) medication.
-- Follow WHO/NHS guidelines for self-medication.
-- Give general guidance, do not diagnose.
-- Escalate only if severity is severe or extreme.
-
-Respond EXACTLY in this JSON format:
-
-{
-  "guidance": "general medical advice",
-  "medications": [
-    { "name": "OTC medication name", "description": "short description" }
-  ],
-  "escalation": "none | consult doctor | urgent care"
-}
-`;
-}
-
+// Serverless API handler
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -76,50 +8,83 @@ export default async function handler(req, res) {
 
   const { symptom, description = "", severity = "" } = req.body;
 
+  console.log("📩 Incoming request:", req.body);
+
   try {
-    const prompt = buildPrompt(symptom, description, severity);
+    // Initialize Gemini AI
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    // Build strict JSON prompt
+    const prompt = `
+IMPORTANT:
+Return ONLY valid JSON.
+No markdown, explanations, or code blocks.
+You are a medical assistant AI. The user reports:
+- Symptom: ${symptom}
+- Description: ${description.slice(0, 300)}
+- Severity: ${severity}
+
+Instructions:
+- Suggest ONLY over-the-counter (OTC) medications.
+- Follow WHO/NHS guidelines.
+- Respond in JSON format exactly like this:
+
+{
+  "guidance": "general medical advice",
+  "escalation": "none | consult doctor | urgent care",
+  "medications": [{"name": "OTC medication name", "description": "short description"}]
+}
+`;
+
+    // Call the AI
     const result = await model.generateContent(prompt);
     const rawText = result.response.text();
 
-    const cleanText = rawText
-      .replace(/```json/i, "")
-      .replace(/```/g, "")
-      .trim();
+    console.log("🤖 RAW Gemini response:\n", rawText);
 
-   let aiResponse;
-try {
-  aiResponse = JSON.parse(cleanText);
-} catch (err) {
-  console.error("❌ Failed to parse AI JSON:", err);
-  aiResponse = {
-    guidance:
-      "I’m having trouble analyzing detailed symptoms right now. Based on what you've shared, consider rest, hydration, and basic OTC relief.",
-    medications: [
-      { name: "Paracetamol", description: "Helps relieve mild pain or discomfort." },
-      { name: "Oral Rehydration Salts", description: "Supports hydration and recovery." }
-    ],
-    escalation: determineEscalation(severity)
-  };
-}
+    // Clean AI output
+    const cleanText = rawText.replace(/```/g, "").trim();
 
-res.json({
-  guidance: aiResponse.guidance || "Consider rest, hydration, and OTC support.",
-  medications: filterOTCMedications(aiResponse.medications || []),
-  escalation: determineEscalation(severity)
-});
+    // Parse JSON safely
+    let aiResponse;
+    try {
+      aiResponse = JSON.parse(cleanText);
+    } catch (err) {
+      console.error("❌ Failed to parse AI JSON:", err);
+      aiResponse = {
+        guidance:
+          "I’m having trouble analyzing detailed symptoms right now. Consider rest, hydration, and basic OTC relief.",
+        medications: [
+          { name: "Paracetamol", description: "Helps relieve mild pain or discomfort." },
+          { name: "Oral Rehydration Salts", description: "Supports hydration and recovery." }
+        ],
+        escalation:
+          severity === "extreme"
+            ? "urgent care"
+            : severity === "severe"
+            ? "consult doctor"
+            : "none"
+      };
+    }
+
+    // Send response
+    res.status(200).json({
+      guidance: aiResponse.guidance || "Consider rest, hydration, and OTC support.",
+      medications: aiResponse.medications || [],
+      escalation: aiResponse.escalation || "none"
+    });
 
   } catch (error) {
-    console.error("Gemini error:", error);
-
-    return res.json({
+    console.error("❌ Gemini fetch error:", error.message);
+    res.status(500).json({
       guidance:
-        "I’m having trouble analyzing detailed symptoms right now. Based on what you've shared, consider rest, hydration, and basic OTC relief. If symptoms persist or worsen, consult a healthcare professional.",
+        "Sorry, we’re having trouble analyzing your symptoms right now.",
       medications: [
         { name: "Paracetamol", description: "Helps relieve mild pain or discomfort." },
         { name: "Oral Rehydration Salts", description: "Supports hydration and recovery." }
       ],
-      escalation: determineEscalation(severity)
+      escalation: severity === "extreme" ? "urgent care" : "none"
     });
   }
 }
-
