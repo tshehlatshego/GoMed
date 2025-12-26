@@ -204,7 +204,7 @@ function handleSeverityResponse(symptomText, severity) {
   }
 
   // OTC guidance for mild/moderate
-  if (severity === "mild" || severity === "moderate") {
+ /**** if (severity === "mild" || severity === "moderate") {
     addBotMessage(
       "Based on what you've shared, your symptoms may be manageable with rest and appropriate over-the-counter medication."
     );
@@ -213,8 +213,8 @@ function handleSeverityResponse(symptomText, severity) {
   }
 
   // Scroll to latest message
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-  callAI("other", symptomText, severity)
+  chatContainer.scrollTop = chatContainer.scrollHeight;**/
+  callAI(symptomText , symptomText, severity)
 }
 
 async function callAI(symptom, description = "", severity = "") {
@@ -280,4 +280,5 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
 
