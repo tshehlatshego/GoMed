@@ -209,7 +209,7 @@ function handleSeverityResponse(symptomText, severity) {
     chatContainer.appendChild(warning);
   }
 
-  callAI("",symptomText, severity)
+  callAI(symptomText,"", severity)
 }
 
 async function callAI(symptom, description = "", severity = "") {
@@ -275,6 +275,7 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
 
 
 
