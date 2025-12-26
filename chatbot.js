@@ -207,9 +207,20 @@ function handleSeverityResponse(symptomText, severity) {
       }
     `;
     chatContainer.appendChild(warning);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 
-  
+  // OTC guidance for mild/moderate
+  if (severity === "mild" || severity === "moderate") {
+    addBotMessage(
+      "Based on what you've shared, your symptoms may be manageable with rest and appropriate over-the-counter medication."
+    );
+    addMedicationCard("Paracetamol", "Pain or fever relief");
+    addMedicationCard("Oral Rehydration Salts", "Hydration support");
+  }
+
+  // Scroll to latest message
+  chatContainer.scrollTop = chatContainer.scrollHeight;
   callAI("other", symptomText, severity)
 }
 
@@ -217,7 +228,7 @@ async function callAI(symptom, description = "", severity = "") {
   showTypingIndicator();
 
   try {
-    const response = await fetch("/api/medical-assist", {
+    const response = await fetch("http://localhost:5000/api/medical-assist", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ symptom, description, severity })
@@ -276,4 +287,3 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
-
