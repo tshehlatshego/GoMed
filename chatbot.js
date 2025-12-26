@@ -207,20 +207,9 @@ function handleSeverityResponse(symptomText, severity) {
       }
     `;
     chatContainer.appendChild(warning);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 
-  // OTC guidance for mild/moderate
-  if (severity === "mild" || severity === "moderate") {
-    addBotMessage(
-      "Based on what you've shared, your symptoms may be manageable with rest and appropriate over-the-counter medication."
-    );
-    addMedicationCard("Paracetamol", "Pain or fever relief");
-    addMedicationCard("Oral Rehydration Salts", "Hydration support");
-  }
-
-  // Scroll to latest message
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  
   callAI("other", symptomText, severity)
 }
 
@@ -287,3 +276,4 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
