@@ -91,16 +91,27 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("AI first attempt failed, retrying...", err.message);
 
-    return res.json({
-      guidance:
-        "Based on what you've shared, rest, hydration, and OTC medication may help. If symptoms worsen, consult a healthcare professional.",
-      medications: [
-        { name: "Paracetamol", description: "Pain or fever relief." },
-        { name: "Oral Rehydration Salts", description: "Hydration support." }
-      ],
-      escalation: determineEscalation(severity)
-    });
+    try {
+      const aiResponse = await fetchAI(); // ❌ Retry AI once
+      return res.json({
+        guidance: aiResponse.guidance,
+        medications: filterOTCMedications(aiResponse.medications),
+        escalation: determineEscalation(severity)
+      });
+    } catch (err2) {
+      console.error("AI retry failed, returning fallback guidance.", err2.message);
+      return res.json({
+        guidance:
+          "Based on what you've shared, rest, hydration, and OTC medication may help. If symptoms worsen, consult a healthcare professional.",
+        medications: [
+          { name: "Paracetamol", description: "Pain or fever relief." },
+          { name: "Oral Rehydration Salts", description: "Hydration support." }
+        ],
+        escalation: determineEscalation(severity)
+      });
+    }
   }
 }
+
