@@ -107,24 +107,34 @@ export default async function handler(req, res) {
   const { symptom, description = "", severity = "" } = req.body;
 
   try {
-    const prompt = buildPrompt(symptom, description, severity);
-    const result = await model.generateContent(prompt);
-    const rawText = result.response.text();
+     console.log("🔑 API KEY EXISTS:", !!process.env.GEMINI_API_KEY);
 
-    const cleanText = rawText
-      .replace(/```json/i, "")
-      .replace(/```/g, "")
-      .trim();
+  const prompt = buildPrompt(symptom, description, severity);
+  console.log("📨 PROMPT SENT");
 
-    const aiResponse = JSON.parse(cleanText);
+  const result = await model.generateContent(prompt);
+  console.log("🤖 Gemini responded");
 
-    let medications = filterOTCMedications(aiResponse.medications);
+  const rawText = result.response.text();
+  console.log("RAW TEXT:", rawText);
 
-    if (!medications.length) {
-      medications = [{
-        name: "Cough Syrup",
-        description: "Helps relieve cough symptoms depending on formulation."
-      }];
+  const cleanText = rawText
+    .replace(/```json/i, "")
+    .replace(/```/g, "")
+    .trim();
+
+  console.log("CLEAN TEXT:", cleanText);
+
+  const aiResponse = JSON.parse(cleanText);
+  console.log("PARSED JSON OK");
+
+  let medications = filterOTCMedications(aiResponse.medications);
+
+  if (!medications.length) {
+    medications = [{
+      name: "Cough Syrup",
+      description: "Helps relieve cough symptoms."
+    }];
     }
 
     return res.status(200).json({
@@ -149,3 +159,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
