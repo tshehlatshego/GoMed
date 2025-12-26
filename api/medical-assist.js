@@ -70,14 +70,25 @@ export default async function handler(req, res) {
   try {
     const prompt = buildPrompt(symptom, description, severity);
     const result = await model.generateContent(prompt);
-    const rawText = result.response.text();
+    const rawText = await result.response.text();
 
     const cleanText = rawText
       .replace(/```json/i, "")
       .replace(/```/g, "")
       .trim();
 
-    const aiResponse = JSON.parse(cleanText);
+  
+let aiResponse;
+try {
+  aiResponse = JSON.parse(cleanText);
+} catch (err) {
+  console.warn("Failed to parse AI JSON, using fallback:", err);
+  aiResponse = {
+    guidance: "",
+    medications: [],
+    escalation: "none"
+  };
+}
 
     return res.json({
       guidance: aiResponse.guidance,
@@ -86,11 +97,11 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("AI error:", err);
 
     return res.json({
       guidance:
-        "Based on what you've shared, rest, hydration, and OTC medication may help. If symptoms worsen, consult a healthcare professional.",
+        "Based on what you've shared, rest, hydration, and Over-the-counter medication may help. If symptoms worsen, consult a healthcare professional.",
       medications: [
         { name: "Paracetamol", description: "Pain or fever relief." },
         { name: "Oral Rehydration Salts", description: "Hydration support." }
@@ -99,3 +110,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
