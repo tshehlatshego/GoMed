@@ -11,19 +11,18 @@ function goToChooseoption() {
     window.location.href = "choose-option.html";
 }
 
-let cart = JSON.parse(localStorage.getItem("gomedCart")) || {};
+let cart = JSON.parse(localStorage.getItem("gomedCart")) || [];
+document.querySelector(".cart-count");
 
 function updateCartCount() {
-  const totalItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
-  cartCountElement.innerText = totalItems;
+  cartCountElement.innerText = cart.length;
 }
 
 updateCartCount();
 
 // Function to add to cart
 function addToCart(name) {
-  const medId = Math.random().toString(36).substr(2, 9); // Simple ID
-  cart[medId] = (cart[medId] || 0) + 1;
+  cart.push(name);
   localStorage.setItem("gomedCart", JSON.stringify(cart));
   updateCartCount();
   alert(`${name} added to cart ✅`);
@@ -32,20 +31,14 @@ function renderCart() {
   const cartList = document.getElementById("cartList");
   cartList.innerHTML = ""; // clear previous
 
-  if (Object.keys(cart).length === 0) {
-    cartList.innerHTML = "<li>Your cart is empty</li>";
-    return;
-  }
-
-  // For chatbot, just show item IDs since we don't have med names stored
-  Object.entries(cart).forEach(([id, qty]) => {
+  cart.forEach((item, index) => {
     const li = document.createElement("li");
-    li.textContent = `Item ${id.substr(0, 5)}... (Qty: ${qty})`;
+    li.textContent = item;
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
     removeBtn.addEventListener("click", () => {
-      removeFromCart(id);
+      removeFromCart(index);
     });
 
     li.appendChild(removeBtn);
@@ -53,8 +46,8 @@ function renderCart() {
   });
 }
 
-function removeFromCart(id) {
-  delete cart[id]; // remove the item
+function removeFromCart(index) {
+  cart.splice(index, 1); // remove the item
   localStorage.setItem("gomedCart", JSON.stringify(cart));
   updateCartCount();
   renderCart();
@@ -211,7 +204,7 @@ function handleSeverityResponse(symptomText, severity) {
   }
 
   // OTC guidance for mild/moderate
-
+ 
   callAI("other", symptomText, severity)
 }
 
@@ -257,7 +250,7 @@ function handleSymptom(symptom) {
   if (symptom === "other") {
     askForCustomSymptoms();
   } else {
-    callAI(symptom);
+    askForSeverity(symptom);
   }
 }
 
@@ -278,5 +271,3 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
-
-
