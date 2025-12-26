@@ -14,7 +14,6 @@ const OTC_ALLOW_LIST = [
   "Pepto",
   "Famotidine",
   "Pepcid",
-  "H2 blocker",
   "Loperamide",
   "Cetirizine",
   "Loratadine",
@@ -44,26 +43,18 @@ function buildPrompt(symptom, description, severity) {
   return `
 IMPORTANT:
 - Return ONLY raw JSON.
-- Do not include markdown, code blocks, or explanations.
+- No markdown or explanations.
 
-You are a medical assistant AI. The user reports:
-- Symptom: ${symptom}
-- Description: ${limitedDescription}
-- Severity: ${severity}
+User:
+Symptom: ${symptom}
+Description: ${limitedDescription}
+Severity: ${severity}
 
-Instructions:
-- Only suggest over-the-counter (OTC) medication.
-- Follow WHO/NHS guidelines for self-medication.
-- Give general guidance, do not diagnose.
-- Escalate only if severity is severe or extreme.
-
-Respond EXACTLY in this JSON format:
+Respond exactly as:
 
 {
-  "guidance": "general medical advice",
-  "medications": [
-    { "name": "OTC medication name", "description": "short description" }
-  ],
+  "guidance": "general advice",
+  "medications": [{"name": "OTC name", "description": "short description"}],
   "escalation": "none | consult doctor | urgent care"
 }
 `;
@@ -94,15 +85,15 @@ export default async function handler(req, res) {
       escalation: determineEscalation(severity)
     });
 
-  } catch (error) {
-    console.error("Gemini error:", error);
+  } catch (err) {
+    console.error(err);
 
     return res.json({
       guidance:
-        "I’m having trouble analyzing detailed symptoms right now. Based on what you've shared, consider rest, hydration, and basic OTC relief. If symptoms persist or worsen, consult a healthcare professional.",
+        "Based on what you've shared, rest, hydration, and OTC medication may help. If symptoms worsen, consult a healthcare professional.",
       medications: [
-        { name: "Paracetamol", description: "Helps relieve mild pain or discomfort." },
-        { name: "Oral Rehydration Salts", description: "Supports hydration and recovery." }
+        { name: "Paracetamol", description: "Pain or fever relief." },
+        { name: "Oral Rehydration Salts", description: "Hydration support." }
       ],
       escalation: determineEscalation(severity)
     });
