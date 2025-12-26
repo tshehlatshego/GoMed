@@ -254,7 +254,7 @@ function handleSymptom(symptom) {
   if (symptom === "other") {
     askForCustomSymptoms();
   } else {
-    askForSeverity(symptom,"");
+    askForSeverity(symptom,symptom);
   }
 }
 
@@ -275,6 +275,7 @@ cartIcon.addEventListener("click", () => {
 
   renderCart(); // show current items
 });
+
 
 
 
